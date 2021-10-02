@@ -1,15 +1,8 @@
 'use strict';
 
-
-const mongoose = require('mongoose')
-const bookSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    status: String,
-    email: String
-   
-});
-const bookModel = mongoose.model('book', bookSchema);
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/books');
+const bookModel = require('./model');
 
 //function
 function seedbookInformation() {
@@ -28,7 +21,7 @@ function seedbookInformation() {
         
     })
     const bookthree = new bookModel({
-        title: 'c++ ',
+        title: 'c++',
         description: 'c++ is a programming language  is fast ',
         status: 'anything',
         email: 'mohammadabdo518@gmail.com',
@@ -42,6 +35,20 @@ function seedbookInformation() {
 // seedbookInformation();
 
 
+// getBook
+console.log('this is bookmodel',bookModel)
+// http://localhost:3001/getbooks?email=mohammadabdo518@gmail.com
+function getBookHandler(req,res){
+    let email = req.query.email
+    bookModel.find({email},function(error,ownerData) {
+        if(error) {
+            console.log('error in getting data',error)
+        } else {
+            res.send(ownerData)
+            console.log(ownerData)
+        }
+    })
+}
 
-
-module.exports = bookModel
+module.exports =
+    getBookHandler ;
